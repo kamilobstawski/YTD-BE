@@ -1,0 +1,7 @@
+Django==1.11.0
+djangorestframework==3.5.3
+pytube==9.2.2
+django-cors-headers==2.2.0
+celery==4.1.1
+django-celery-beat==1.1.1
+whitenoise==3.3.1

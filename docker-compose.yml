@@ -1,0 +1,32 @@
+version: '3'
+
+volumes:
+  static:
+  media:
+
+services:
+  web:
+    command: ["./manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - static:/static
+      - media:/static
+    ports:
+      - "8000:8000"
+    image: django_app
+
+  rabbit:
+      hostname: rabbit
+      image: rabbitmq:3.6.0
+      ports:
+        - "5672:5672"  # we forward this port because it's useful for debugging
+        - "15672:15672"  # here, we can access rabbitmq management plugin
+      environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest
+
+  worker:
+    build: .
+    command: celery -A YTD worker --loglevel=INFO
+    image: django_app
+    depends_on:
+      - rabbit
